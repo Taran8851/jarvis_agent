@@ -1,0 +1,3 @@
+- A first-run or tip dialog may sit on top of a freshly started app: close it before anything else.
+- The background session has no file picker: a web page's Browse/upload button and an app's "Save As" picker do not open. Say so instead of retrying.
+- The background session has no Trash service: Files cannot show or restore trashed items there.

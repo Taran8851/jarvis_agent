@@ -1,0 +1,4 @@
+- VS Code's app name is `code`; start it on a file or folder with `tool.py launch code PATH`. Its settings live in ~/.config/jarvis-bg/code/User.
+- Command palette: ctrl+shift+p, type the command name, enter. "Preferences: Color Theme" and "Preferences: Open Keyboard Shortcuts (JSON)" are there.
+- Find and replace in a file: ctrl+h, type both fields, "Replace All", then ctrl+s.
+- The editor is the `entry` named after the file. Paste multi-line text rather than typing it line by line.

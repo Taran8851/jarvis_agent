@@ -1,0 +1,8 @@
+- LibreOffice's app name is `soffice`. Start it on a file with `tool.py launch soffice /full/path` (a relative path fails).
+- Saving a .docx, .xlsx or .pptx with ctrl+s opens a "Keep current format" dialog: press the "Use Word/Excel/PowerPoint ...!" button to keep the format.
+- Calc: there is no Name Box in the tree. Go to a cell with ctrl+home and arrow keys, or select a range with shift+arrows.
+- Calc: Paste Special (ctrl+shift+v) has a "Transpose All" button.
+- Calc: Save As (ctrl+shift+s) has a file-type combo box; choosing "Text CSV (.csv)" then asks "Use Text CSV Format!" and shows an export options dialog (OK).
+- Writer: "Export Directly as PDF" is a toolbar button; Format > Text has lowercase/UPPERCASE; Table > Insert Table... has spin buttons for columns and rows.
+- Impress: text boxes on a slide are not in the tree: use one screenshot and click-at. Slide Sorter view allows copy and paste of whole slides.
+- LibreOffice has closed itself when Insert > Chart..., the Slide menu, or the Add Image file picker were pressed through the tree. If it disappears from `apps`, relaunch and take another route (keyboard menu access with alt+letter, or a toolbar button).

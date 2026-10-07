@@ -1,0 +1,4 @@
+- Each zenity dialog is its own app named `zenity`.
+- In a checklist the tick boxes' state is not reliable in the tree: read it from one screenshot and toggle with click-at on the box.
+- In the calendar, moving focus does not select a day: press space on the focused day, then OK.
+- The scale dialog's slider is not in the tree: click-at on the track at the wanted fraction, the label next to it shows the value.

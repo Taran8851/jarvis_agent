@@ -1,0 +1,4 @@
+- VLC shows no elements in the tree at all: use one screenshot, then click-at and keys.
+- Preferences open with ctrl+p; "All" (bottom left) shows the full settings with a search box. Save is bottom right. Some settings apply only after VLC is restarted.
+- Starting VLC with a file path or URL as argument (`tool.py launch vlc URL`) plays it; the window title then shows the media name.
+- Clicking VLC's menu bar by coordinates did not open a menu; buttons in the control bar do respond.

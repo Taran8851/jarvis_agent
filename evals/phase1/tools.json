@@ -1,0 +1,21 @@
+[
+  {"type": "function", "function": {
+    "name": "vault_search",
+    "description": "Search ONLY the owner's own notes vault (their projects, decisions, logs, ideas). Use it when the owner asks what THEIR notes say. It cannot see the internet, papers, docs or anything outside their notes.",
+    "parameters": {"type": "object", "properties": {"query": {"type": "string", "description": "Words to search their notes for."}}, "required": ["query"]}}},
+  {"type": "function", "function": {
+    "name": "think",
+    "description": "Ask a stronger model for a considered answer to speak back on this call, when the question needs judgement or explanation (tradeoffs, advice, explaining a concept or an error) but no web search, files or code. Takes a few seconds.",
+    "parameters": {"type": "object", "properties": {"question": {"type": "string", "description": "The full question, with the context from this call."}}, "required": ["question"]}}},
+  {"type": "function", "function": {
+    "name": "delegate",
+    "description": "Hand heavy work to a specialist agent that runs in the background; the result reaches the owner on Telegram. agent=research: anything needing the internet, papers, repos, docs, comparisons, reports. agent=dev: anything that writes, fixes, runs or tests code, or touches repos and files.",
+    "parameters": {"type": "object", "properties": {
+      "agent": {"type": "string", "enum": ["research", "dev"]},
+      "task": {"type": "string", "description": "A self-contained task description the agent can do without this conversation."}},
+      "required": ["agent", "task"]}}},
+  {"type": "function", "function": {
+    "name": "hang_up",
+    "description": "End the call. Use only when the owner says goodbye or asks to end the call.",
+    "parameters": {"type": "object", "properties": {}}}}
+]

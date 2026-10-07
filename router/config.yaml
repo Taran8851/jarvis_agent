@@ -1,0 +1,64 @@
+# Jarvis model router (LiteLLM proxy). Callers ask for a tier, not a provider.
+# Keys come from the environment (see install.sh); none live in this file.
+# Tier 2 (hard work) stays on the Claude plan via the Hermes plugin: LiteLLM can't use it.
+#
+#   tier-0       trivial: summarise, classify, reformat, look up    Gemini Flash (free tier, 4 keys)
+#   tier-1       routine: drafts, research gathering, simple code   Bedrock Mantle (credits)
+#   tier-1-code  code-heavy routine work                            Bedrock Mantle, Qwen3-Coder 480B
+#   tier-1-think harder reasoning, without spending the Claude plan  Bedrock Mantle, Kimi K2 Thinking
+#
+# This is one working example (Gemini free tier + AWS Bedrock Mantle). Swap the model_list for
+# whatever providers you have keys for; keep the tier names, callers only know those.
+# Model ids checked against the live endpoints on 2026-09-28 (Mantle /v1/models, Gemini models list).
+
+x-mantle: &mantle
+  api_base: https://bedrock-mantle.us-east-1.api.aws/v1
+  api_key: os.environ/BEDROCK_MANTLE_KEY
+
+model_list:
+  # tier-0: one deployment per Gemini key; the router spreads load and cools down a key on 429
+  - {model_name: tier-0, litellm_params: {model: gemini/gemini-flash-latest, api_key: os.environ/GEMINI_API_KEY_1}}
+  - {model_name: tier-0, litellm_params: {model: gemini/gemini-flash-latest, api_key: os.environ/GEMINI_API_KEY_2}}
+  - {model_name: tier-0, litellm_params: {model: gemini/gemini-flash-latest, api_key: os.environ/GEMINI_API_KEY_3}}
+  - {model_name: tier-0, litellm_params: {model: gemini/gemini-flash-latest, api_key: os.environ/GEMINI_API_KEY_4}}
+  - {model_name: tier-0-lite, litellm_params: {model: gemini/gemini-flash-lite-latest, api_key: os.environ/GEMINI_API_KEY_1}}
+  - {model_name: tier-0-lite, litellm_params: {model: gemini/gemini-flash-lite-latest, api_key: os.environ/GEMINI_API_KEY_2}}
+  - {model_name: tier-0-lite, litellm_params: {model: gemini/gemini-flash-lite-latest, api_key: os.environ/GEMINI_API_KEY_3}}
+  - {model_name: tier-0-lite, litellm_params: {model: gemini/gemini-flash-lite-latest, api_key: os.environ/GEMINI_API_KEY_4}}
+
+  # tier-1: Bedrock Mantle is OpenAI-compatible, so it goes through the openai/ route
+  - model_name: tier-1
+    litellm_params: {model: openai/qwen.qwen3-235b-a22b-2507, <<: *mantle}
+  - model_name: tier-1-oss
+    litellm_params: {model: openai/openai.gpt-oss-120b, <<: *mantle}
+  - model_name: tier-1-glm
+    litellm_params: {model: openai/zai.glm-5, <<: *mantle}
+  - model_name: tier-1-deepseek
+    litellm_params: {model: openai/deepseek.v3.2, <<: *mantle}
+  - model_name: tier-1-code
+    litellm_params: {model: openai/qwen.qwen3-coder-480b-a35b-instruct, <<: *mantle}
+  - model_name: tier-1-code-devstral
+    litellm_params: {model: openai/mistral.devstral-2-123b, <<: *mantle}
+  - model_name: tier-1-kimi
+    litellm_params: {model: openai/moonshotai.kimi-k2.5, <<: *mantle}
+  - model_name: tier-1-think
+    litellm_params: {model: openai/moonshotai.kimi-k2-thinking, <<: *mantle}
+
+router_settings:
+  routing_strategy: simple-shuffle
+  num_retries: 2
+  retry_after: 2
+  allowed_fails: 2          # a deployment failing twice in a minute is cooled down
+  cooldown_time: 60
+  fallbacks:
+    - tier-0: [tier-0-lite, tier-1]
+    - tier-1: [tier-1-deepseek, tier-1-oss, tier-1-glm]
+    - tier-1-code: [tier-1-code-devstral, tier-1-kimi]
+    - tier-1-think: [tier-1-deepseek, tier-1-glm]
+
+litellm_settings:
+  drop_params: true         # ignore OpenAI params a backend doesn't support instead of failing
+  request_timeout: 600
+
+general_settings:
+  master_key: os.environ/JARVIS_ROUTER_KEY   # callers must send this; the proxy listens on 127.0.0.1 only

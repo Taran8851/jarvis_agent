@@ -1,0 +1,5 @@
+- `snap Firefox` lists the page and any dialog; the toolbar is hidden unless `--chrome`. Long pages: `--all` plus `--grep`.
+- Open a URL with `tool.py launch firefox --new-window URL`, not through the address bar.
+- A page's alert box is a dialog with an OK button: press it.
+- Things drawn on a canvas (games, boards, paint programs) and drag targets are not in the tree: one screenshot, then click-at / drag / keys.
+- Date pickers and custom dropdowns often take typed text plus enter more reliably than clicks on their popups.

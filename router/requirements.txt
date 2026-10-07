@@ -1,0 +1,3 @@
+# jarvis-router (Python 3.12). Pinned to a release at least a week old: the router holds every
+# provider key, and LiteLLM's PyPI releases were hit by a supply-chain attack earlier in 2026.
+litellm[proxy]==1.102.0
